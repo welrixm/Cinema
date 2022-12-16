@@ -1,0 +1,66 @@
+﻿<Page x:Class="Cinema.Pages.EditPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Cinema.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="EditPage">
+
+    <Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Style="{StaticResource TxtBlock}">Наименование</TextBlock>
+                    <TextBox x:Name="NameTbx" Style="{StaticResource TxtBox}" Text="{Binding Name}"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Style="{StaticResource TxtBlock}">Режиссер</TextBlock>
+                    <TextBox x:Name="DirectorTbx" Style="{StaticResource TxtBox}" Text="{Binding Director}"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Style="{StaticResource TxtBlock}">Сценарист</TextBlock>
+                    <TextBox x:Name="WritertTbx" Style="{StaticResource TxtBox}" Text="{Binding Screenwriter}"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Style="{StaticResource TxtBlock}">Оператор</TextBlock>
+                    <TextBox x:Name="OperatorTbx" Style="{StaticResource TxtBox}" Text="{Binding Operator}"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Style="{StaticResource TxtBlock}">Дата релиза</TextBlock>
+                    <TextBox x:Name="ReleaseTbx" Style="{StaticResource TxtBox}" Text="{Binding ReleaseDate}"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Style="{StaticResource TxtBlock}">Количество билетов</TextBlock>
+                    <TextBox x:Name="QuanTbx" Style="{StaticResource TxtBox}" Text="{Binding QuanTicket}"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Style="{StaticResource TxtBlock}">Жанр</TextBlock>
+                    <ComboBox x:Name="GenreCbx" Style="{StaticResource ComboBox}" SelectedItem="{Binding Genre}"></ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Style="{StaticResource TxtBlock}">Стоимость</TextBlock>
+                    <TextBox x:Name="CostTbx" Style="{StaticResource TxtBox}" Text="{Binding Cost}"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Style="{StaticResource TxtBlock}">Длительнность времени</TextBlock>
+                    <TextBox x:Name="TimeTbx" Style="{StaticResource TxtBox}" Text="{Binding MovieTime}"></TextBox>
+                </StackPanel>
+
+
+                <Button x:Name="SaveBtn" Content="Сохранить" Click="SaveBtn_Click"  Style="{StaticResource Button}"></Button>
+            </StackPanel>
+
+
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+
+                <Image Height="250" Width="200"  x:Name="MovieImage" Source="{Binding Image}"></Image>
+                <Button Style="{StaticResource Button}" Name="AddImageBtn" Click="AddImageBtn_Click">Добавить изображение</Button>
+
+
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>
