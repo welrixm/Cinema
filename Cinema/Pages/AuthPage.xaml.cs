@@ -25,6 +25,10 @@ namespace Cinema.Pages
         public AuthPage()
         {
             InitializeComponent();
+            if (Properties.Settings.Default.Login != null)
+                LoginTb.Text = Properties.Settings.Default.Login;
+            if (Properties.Settings.Default.Password != null)
+                PasswordTb.Password = Properties.Settings.Default.Password;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -44,6 +48,14 @@ namespace Cinema.Pages
                 }           
                 else
                 {
+                    if (SaveCb.IsChecked == true)
+                    {
+                        Properties.Settings.Default.Login = LoginTb.Text;
+                        Properties.Settings.Default.Password = PasswordTb.Password;
+                        Properties.Settings.Default.Save();
+
+
+                    }
                     Navigation.isAuth = true;
                     Navigation.NextPage(new Nav("Кинотеатр", new FilmPage()));
                 }

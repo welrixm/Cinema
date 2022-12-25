@@ -13,10 +13,10 @@ namespace Cinema.Components
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class Cinema1Entities1 : DbContext
+    public partial class Cinema1Entities5 : DbContext
     {
-        public Cinema1Entities1()
-            : base("name=Cinema1Entities1")
+        public Cinema1Entities5()
+            : base("name=Cinema1Entities5")
         {
         }
     
@@ -26,20 +26,21 @@ namespace Cinema.Components
         }
     
         public virtual DbSet<Cinema> Cinema { get; set; }
+        public virtual DbSet<CinemaMovie> CinemaMovie { get; set; }
         public virtual DbSet<Client> Client { get; set; }
         public virtual DbSet<Employee> Employee { get; set; }
         public virtual DbSet<Genre> Genre { get; set; }
+        public virtual DbSet<Hole> Hole { get; set; }
         public virtual DbSet<Movie> Movie { get; set; }
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<Sale> Sale { get; set; }
-        public virtual DbSet<Screening> Screening { get; set; }
+        public virtual DbSet<Seat> Seat { get; set; }
         public virtual DbSet<Session> Session { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Ticket> Ticket { get; set; }
+        public virtual DbSet<TicketSeat> TicketSeat { get; set; }
         public virtual DbSet<Timetable> Timetable { get; set; }
         public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<MovieSeat> MovieSeat { get; set; }
-        public virtual DbSet<Seat> Seat { get; set; }
     }
 }

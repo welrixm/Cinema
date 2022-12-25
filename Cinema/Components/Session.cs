@@ -23,7 +23,7 @@ namespace Cinema.Components
         public int Id { get; set; }
         public Nullable<int> MovieId { get; set; }
         public Nullable<System.DateTime> TimeOfSession { get; set; }
-        public Nullable<System.DateTime> DateOfSession { get; set; }
+        public Nullable<decimal> Cost { get; set; }
     
         public virtual Movie Movie { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

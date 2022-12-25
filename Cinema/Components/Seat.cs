@@ -17,7 +17,7 @@ namespace Cinema.Components
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Seat()
         {
-            this.MovieSeat = new HashSet<MovieSeat>();
+            this.TicketSeat = new HashSet<TicketSeat>();
         }
     
         public int Id { get; set; }
@@ -25,6 +25,6 @@ namespace Cinema.Components
         public string Color { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MovieSeat> MovieSeat { get; set; }
+        public virtual ICollection<TicketSeat> TicketSeat { get; set; }
     }
 }

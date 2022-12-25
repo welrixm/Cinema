@@ -32,6 +32,8 @@ namespace Cinema.Pages
             DataContext = movie;
             GenreCbx.ItemsSource = DBConnect.db.Genre.ToList();
             GenreCbx.DisplayMemberPath = "Name";
+            HoleCbx.ItemsSource = DBConnect.db.Hole.ToList();
+            HoleCbx.DisplayMemberPath = "Name";
         }
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)

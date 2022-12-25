@@ -6,8 +6,8 @@
       xmlns:local="clr-namespace:Cinema.Pages"
       mc:Ignorable="d" 
       DataContext="{Binding RelativeSource={RelativeSource Self}}"
-      d:DesignHeight="500" d:DesignWidth="1500"
-      Title="FilmPage">
+      d:DesignHeight="500" d:DesignWidth="1600"
+      Title="FilmPage" IsVisibleChanged="Page_IsVisibleChanged">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -22,29 +22,29 @@
             <Border Grid.Row="1" Background="#FF827B7B" CornerRadius="0 40 0 40">
                 <DockPanel>
                     <StackPanel DockPanel.Dock="Top" Margin="10 80 ">
-                        <Button>
+                        <!--<Button>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock>Кинотеатры</TextBlock>
                             </StackPanel>
-                        </Button>
+                        </Button>-->
                         <Button Click="Button_Click">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock>Фильмы</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button>
+                        <Button x:Name="SessionBtn" Click="SessionBtn_Click">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock>Сеансы</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button>
+                        <Button x:Name="TicketBtn" Click="TicketBtn_Click">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock>Расписание</TextBlock>
+                                <TextBlock>Билеты</TextBlock>
                             </StackPanel>
                         </Button>
                         
                     </StackPanel>
-                    <Button VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Margin="15 " Width="80">
+                    <Button VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Margin="15 " Width="80" x:Name="ExitBtn" Click="ExitBtn_Click">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock>Выход</TextBlock>
                         </StackPanel>
@@ -68,11 +68,11 @@
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <TextBlock  Margin="5" Style="{StaticResource TxtBlock}" >Поиск</TextBlock>
+                    <TextBlock  Margin="5" Style="{StaticResource TxtBlock2}" >Поиск</TextBlock>
                     <TextBox x:Name="SearchTb" Style="{StaticResource TxtBox}" SelectionChanged="SearchTb_SelectionChanged"></TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <TextBlock Margin="5" Style="{StaticResource TxtBlock}" >Сортировка:</TextBlock>
+                    <TextBlock Margin="5" Style="{StaticResource TxtBlock2}" >Сортировка:</TextBlock>
                     <ComboBox Name="CbSort"  Style="{StaticResource ComboBox}"  SelectionChanged="CbSort_SelectionChanged">
                         <ComboBoxItem  Tag="1" Content="Все" ></ComboBoxItem>
                         <ComboBoxItem Tag="2" Content="А-Я" ></ComboBoxItem>
@@ -85,15 +85,15 @@
 
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="5" Style="{StaticResource TxtBlock}">Записи:</TextBlock>
+                    <TextBlock Margin="5" Style="{StaticResource TxtBlock2}">Записи:</TextBlock>
                     <ComboBox Name="CbCount"  Style="{StaticResource ComboBox}" SelectionChanged="CbCount_SelectionChanged">
                         <ComboBoxItem Content="Все" ></ComboBoxItem>
-                        <ComboBoxItem Content="5" ></ComboBoxItem>
-                        <ComboBoxItem Content="10" ></ComboBoxItem>
-                        <ComboBoxItem Content="15" ></ComboBoxItem>
+                        <ComboBoxItem Content="3" ></ComboBoxItem>
+                        <ComboBoxItem Content="6" ></ComboBoxItem>
+                        <ComboBoxItem Content="9" ></ComboBoxItem>
 
                     </ComboBox>
-                    <TextBlock Margin="10" Style="{StaticResource TxtBlock}">Жанры:</TextBlock>
+                    <TextBlock Margin="10" Style="{StaticResource TxtBlock2}">Жанры:</TextBlock>
                     <ComboBox Name="CbFiltration"  Style="{StaticResource ComboBox}"   Margin="5" SelectionChanged="CbFiltration_SelectionChanged">
                         <ComboBoxItem Content="Все" Tag="1"></ComboBoxItem>
                         <ComboBoxItem Content="Комедия" Tag="2"></ComboBoxItem>
@@ -115,36 +115,52 @@
                 </ListView.ItemsPanel>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Margin="20" Width="400" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="70"></RowDefinition>
-                                <RowDefinition Height="410"></RowDefinition>
-                                <RowDefinition Height="auto"></RowDefinition>
-                                <RowDefinition Height="auto"></RowDefinition>
-                                <RowDefinition Height="auto"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Image Source="{Binding Image}" Width="300" Height="400" HorizontalAlignment="Center" Stretch="UniformToFill" Margin="5 5" Grid.Row="1"></Image>
-                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" TextAlignment="Center" Width="390" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="5 5" FontSize="20" Grid.Row="0"></TextBlock>
-                            <TextBlock Text="{Binding Cost, StringFormat={}{0:N2} РУБ}" Grid.Row="2" Margin="5 5 5 15" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"></TextBlock>
-                            <TextBlock Text="{Binding QuanTicket, StringFormat={} Билетов осталось:{0}}" Grid.Row="3" FontSize="14" HorizontalAlignment="Right"></TextBlock>
-                            <TextBlock Text="{Binding IsActive}" Grid.Row="3" FontSize="14" HorizontalAlignment="Left"></TextBlock>
-                            
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="4">
-                                <Button x:Name="BtnEdit"  Style="{StaticResource Button}" Click="BtnEdit_Click"   Content="Редактировать"></Button>
-                                <Button x:Name="BtnDelete" Style="{StaticResource Button}" Click="BtnDelete_Click"   Content="Удалить"></Button>
+                        <Border Background="{Binding Color}">
+                            <Grid Margin="20" Width="400" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="70"></RowDefinition>
+                                    <RowDefinition Height="410"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Image Source="{Binding Image}" Width="300" Height="400" HorizontalAlignment="Center" Stretch="UniformToFill" Margin="5 5" Grid.Row="1"></Image>
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" TextAlignment="Center" Width="390" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="5 5" FontSize="20" Grid.Row="0"></TextBlock>
+                                <!--<TextBlock Text="{Binding Cost, StringFormat={}{0:N2} РУБ}" Grid.Row="2" Margin="5 5 5 15" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"></TextBlock>-->
+                                <TextBlock Text="{Binding QuanTicket, StringFormat={} Билетов осталось:{0}}" Grid.Row="3" FontSize="14" HorizontalAlignment="Right"></TextBlock>
+                                <TextBlock Text="{Binding ActiveText}" Grid.Row="3" FontSize="14" HorizontalAlignment="Left" Foreground="Green"></TextBlock>
+                                <Border Grid.Row="4" HorizontalAlignment="Right">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Hole.Name}" Style="{StaticResource TxtBlock}"></TextBlock>
 
-                            </StackPanel>
-                            
-                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="4">
+                                    <Button x:Name="BtnEdit"  Style="{StaticResource Button}" Click="BtnEdit_Click"   Visibility="{Binding BtnVisible}" Content="Редактировать"></Button>
+                                    <Button x:Name="BtnDelete" Style="{StaticResource Button}" Click="BtnDelete_Click"  Visibility="{Binding BtnVisible}"  Content="Удалить"></Button>
+
+
+
+                                </StackPanel>
+
+                            </Grid>
+                        </Border>
+                        
                         
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 
             </ListView>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="6">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="250"  >
+                    <Button x:Name="LeftBtn" Content="&lt;" Margin="15 0" Width="30" Click="LeftBtn_Click"  Style="{StaticResource Button}"></Button>
+                    <TextBlock x:Name="FoundCount" Style="{StaticResource TxtBlock2}"></TextBlock>
+                    <TextBlock x:Name="GeneralCount" Style="{StaticResource TxtBlock2}"></TextBlock>
+                    <Button x:Name="RightBtn" Content="&gt;" Margin="30 0" Width="30" Click="RightBtn_Click"  Style="{StaticResource Button}"></Button>
+                </StackPanel>
                 <Button x:Name="AddNewMovieBtn" Style="{StaticResource Button}" Click="AddNewMovieBtn_Click">Добавить</Button>
                 <Button x:Name="BuyTicketBtn" Style="{StaticResource Button}" Click="BuyTicketBtn_Click"  Margin="10">Купить билет</Button>
-                <Button x:Name="TicketBtn" Style="{StaticResource Button}" Click="TicketBtn_Click"  Margin="10">Список билетов</Button>
+                <!--<Button x:Name="TicketBtn" Style="{StaticResource Button}" Click="TicketBtn_Click"  Margin="10">Список билетов</Button>-->
             </StackPanel>
         </Grid>
         

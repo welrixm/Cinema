@@ -14,19 +14,37 @@
                 <TextBlock  FontSize="30" Foreground="Black" Margin="0 0 0 20" FontWeight="Bold">Регистрация</TextBlock>
                 <Grid Margin="0 0 0 20">
                     <Button HorizontalAlignment="Right" x:Name="RegistBtn" Click="RegistBtn_Click" Style="{StaticResource Button}">Зарегистрироваться</Button>
-                    <Button HorizontalAlignment="Left" x:Name="CleanBtn" Style="{StaticResource Button}">Очистить</Button>
+                    <Button HorizontalAlignment="Left" x:Name="CleanBtn" Style="{StaticResource Button}" Click="CleanBtn_Click">Очистить</Button>
 
                 </Grid>
-
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <TextBlock Style="{StaticResource TxtBlock}">Логин:</TextBlock>
-                    <TextBox  x:Name="LoginTb" Style="{StaticResource TxtBox}"></TextBox>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Style="{StaticResource TxtBlock}">Логин:</TextBlock>
+                        <TextBox  x:Name="LoginTb" Style="{StaticResource TxtBox}"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Style="{StaticResource TxtBlock}">Пароль:</TextBlock>
+                        <PasswordBox x:Name="PasswordTb" Style="{StaticResource PswBox}"></PasswordBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Style="{StaticResource TxtBlock}">Фамилия:</TextBlock>
+                        <TextBox  x:Name="FirstNameTb" Style="{StaticResource TxtBox}"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Style="{StaticResource TxtBlock}">Имя:</TextBlock>
+                        <TextBox  x:Name="LastNameTb" Style="{StaticResource TxtBox}"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Style="{StaticResource TxtBlock}">Отчество:</TextBlock>
+                        <TextBox  x:Name="PatronymicTb" Style="{StaticResource TxtBox}"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Style="{StaticResource TxtBlock}">Email:</TextBlock>
+                        <TextBox  x:Name="EmailTb" Style="{StaticResource TxtBox}"></TextBox>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <TextBlock Style="{StaticResource TxtBlock}">Пароль:</TextBlock>
-                    <PasswordBox x:Name="PasswordTb" Style="{StaticResource PswBox}"></PasswordBox>
-                </StackPanel>
+
+                
 
 
             </StackPanel>

@@ -27,8 +27,11 @@
                     <TextBlock  Style="{StaticResource TxtBlock}">Пароль:</TextBlock>
                     <PasswordBox x:Name="PasswordTb" Style="{StaticResource PswBox}"></PasswordBox>
                 </StackPanel>
-               
-                
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox IsChecked="True" Name="SaveCb" Margin="10"></CheckBox>
+                    <TextBlock Style="{StaticResource TxtBlock}">Сохранить данные</TextBlock>
+                </StackPanel>
+
             </StackPanel>
         </Border>
         

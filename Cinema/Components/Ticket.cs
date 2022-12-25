@@ -17,18 +17,16 @@ namespace Cinema.Components
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Ticket()
         {
-            this.Sale = new HashSet<Sale>();
+            this.TicketSeat = new HashSet<TicketSeat>();
         }
     
         public int Id { get; set; }
-        public Nullable<int> MovieId { get; set; }
         public Nullable<int> SessionId { get; set; }
-        public Nullable<int> CinemaId { get; set; }
+        public Nullable<decimal> TotalCost { get; set; }
+        public Nullable<int> QuantityTicket { get; set; }
     
-        public virtual Cinema Cinema { get; set; }
-        public virtual Movie Movie { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sale> Sale { get; set; }
         public virtual Session Session { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TicketSeat> TicketSeat { get; set; }
     }
 }

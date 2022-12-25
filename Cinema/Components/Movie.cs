@@ -18,29 +18,22 @@ namespace Cinema.Components
         public Movie()
         {
             this.Session = new HashSet<Session>();
-            this.Ticket = new HashSet<Ticket>();
-            this.MovieSeat = new HashSet<MovieSeat>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Operator { get; set; }
         public string Director { get; set; }
-        public string Screenwriter { get; set; }
         public Nullable<System.DateTime> ReleaseDate { get; set; }
-        public Nullable<decimal> Cost { get; set; }
         public byte[] Image { get; set; }
         public Nullable<int> MovieTime { get; set; }
         public Nullable<int> GenreId { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> QuanTicket { get; set; }
+        public Nullable<int> HoleId { get; set; }
     
         public virtual Genre Genre { get; set; }
+        public virtual Hole Hole { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Session> Session { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Ticket> Ticket { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MovieSeat> MovieSeat { get; set; }
     }
 }

@@ -22,6 +22,5 @@ namespace Cinema.Components
         public Nullable<int> Place { get; set; }
     
         public virtual Client Client { get; set; }
-        public virtual Ticket Ticket { get; set; }
     }
 }

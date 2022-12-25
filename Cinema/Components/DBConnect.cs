@@ -8,6 +8,6 @@ namespace Cinema.Components
 {
     class DBConnect
     {
-        public static Cinema1Entities1 db = new Cinema1Entities1();
+        public static Cinema1Entities5 db = new Cinema1Entities5();
     }
 }

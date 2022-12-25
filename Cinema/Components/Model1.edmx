@@ -12,6 +12,16 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="EmployeeId" Type="int" />
+          <Property Name="Place" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CinemaMovie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CinemaId" Type="int" />
+          <Property Name="MovieId" Type="int" />
         </EntityType>
         <EntityType Name="Client">
           <Key>
@@ -41,30 +51,27 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Hole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Movie">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="Operator" Type="nvarchar" MaxLength="50" />
           <Property Name="Director" Type="nvarchar" MaxLength="50" />
-          <Property Name="Screenwriter" Type="nvarchar" MaxLength="50" />
           <Property Name="ReleaseDate" Type="date" />
-          <Property Name="Cost" Type="decimal" Precision="18" Scale="0" />
           <Property Name="Image" Type="image" />
           <Property Name="MovieTime" Type="int" />
           <Property Name="GenreId" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="QuanTicket" Type="int" />
-        </EntityType>
-        <EntityType Name="MovieSeat">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="MovieId" Type="int" />
-          <Property Name="SeatId" Type="int" />
+          <Property Name="HoleId" Type="int" />
         </EntityType>
         <EntityType Name="Post">
           <Key>
@@ -92,13 +99,6 @@
           <Property Name="Price" Type="money" />
           <Property Name="Place" Type="int" />
         </EntityType>
-        <EntityType Name="Screening">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="MovieId" Type="int" />
-        </EntityType>
         <EntityType Name="Seat">
           <Key>
             <PropertyRef Name="Id" />
@@ -111,10 +111,10 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MovieId" Type="int" />
           <Property Name="TimeOfSession" Type="datetime" />
-          <Property Name="DateOfSession" Type="datetime" />
+          <Property Name="Cost" Type="decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -130,10 +130,18 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="MovieId" Type="int" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SessionId" Type="int" />
-          <Property Name="CinemaId" Type="int" />
+          <Property Name="TotalCost" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="QuantityTicket" Type="int" />
+        </EntityType>
+        <EntityType Name="TicketSeat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TicketId" Type="int" />
+          <Property Name="SeatId" Type="int" />
         </EntityType>
         <EntityType Name="Timetable">
           <Key>
@@ -152,8 +160,11 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Login" Type="nvarchar" MaxLength="50" />
           <Property Name="Password" Type="nvarchar" MaxLength="50" />
-          <Property Name="ClientId" Type="int" />
           <Property Name="RoleId" Type="int" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Patronymic" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_Cinema_Employee">
           <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
@@ -191,27 +202,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_MovieSeat_Movie">
-          <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
-          <End Role="MovieSeat" Type="Self.MovieSeat" Multiplicity="*" />
+        <Association Name="FK_Movie_Hole">
+          <End Role="Hole" Type="Self.Hole" Multiplicity="0..1" />
+          <End Role="Movie" Type="Self.Movie" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Movie">
+            <Principal Role="Hole">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="MovieSeat">
-              <PropertyRef Name="MovieId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MovieSeat_Seat">
-          <End Role="Seat" Type="Self.Seat" Multiplicity="0..1" />
-          <End Role="MovieSeat" Type="Self.MovieSeat" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Seat">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MovieSeat">
-              <PropertyRef Name="SeatId" />
+            <Dependent Role="Movie">
+              <PropertyRef Name="HoleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -227,18 +226,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Sale_Ticket">
-          <End Role="Ticket" Type="Self.Ticket" Multiplicity="0..1" />
-          <End Role="Sale" Type="Self.Sale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Ticket">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Sale">
-              <PropertyRef Name="TicketId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Session_Movie">
           <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
           <End Role="Session" Type="Self.Session" Multiplicity="*" />
@@ -247,30 +234,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Session">
-              <PropertyRef Name="MovieId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Ticket_Cinema">
-          <End Role="Cinema" Type="Self.Cinema" Multiplicity="0..1" />
-          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cinema">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Ticket">
-              <PropertyRef Name="CinemaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Ticket_Movie">
-          <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
-          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Movie">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Ticket">
               <PropertyRef Name="MovieId" />
             </Dependent>
           </ReferentialConstraint>
@@ -287,6 +250,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TicketSeat_Seat">
+          <End Role="Seat" Type="Self.Seat" Multiplicity="0..1" />
+          <End Role="TicketSeat" Type="Self.TicketSeat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seat">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TicketSeat">
+              <PropertyRef Name="SeatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TicketSeat_Ticket">
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="0..1" />
+          <End Role="TicketSeat" Type="Self.TicketSeat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ticket">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TicketSeat">
+              <PropertyRef Name="TicketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Timetable_Cinema">
           <End Role="Cinema" Type="Self.Cinema" Multiplicity="1" />
           <End Role="Timetable" Type="Self.Timetable" Multiplicity="*" />
@@ -296,18 +283,6 @@
             </Principal>
             <Dependent Role="Timetable">
               <PropertyRef Name="CinemaId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_Client">
-          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
-          <End Role="User" Type="Self.User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Client">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="ClientId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -325,19 +300,20 @@
         </Association>
         <EntityContainer Name="Хранилище Cinema1ModelContainer">
           <EntitySet Name="Cinema" EntityType="Self.Cinema" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CinemaMovie" EntityType="Self.CinemaMovie" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Genre" EntityType="Self.Genre" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hole" EntityType="Self.Hole" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Movie" EntityType="Self.Movie" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MovieSeat" EntityType="Self.MovieSeat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sale" EntityType="Self.Sale" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Screening" EntityType="Self.Screening" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Seat" EntityType="Self.Seat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Session" EntityType="Self.Session" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ticket" EntityType="Self.Ticket" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TicketSeat" EntityType="Self.TicketSeat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Timetable" EntityType="Self.Timetable" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Cinema_Employee" Association="Self.FK_Cinema_Employee">
@@ -352,45 +328,33 @@
             <End Role="Genre" EntitySet="Genre" />
             <End Role="Movie" EntitySet="Movie" />
           </AssociationSet>
-          <AssociationSet Name="FK_MovieSeat_Movie" Association="Self.FK_MovieSeat_Movie">
+          <AssociationSet Name="FK_Movie_Hole" Association="Self.FK_Movie_Hole">
+            <End Role="Hole" EntitySet="Hole" />
             <End Role="Movie" EntitySet="Movie" />
-            <End Role="MovieSeat" EntitySet="MovieSeat" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MovieSeat_Seat" Association="Self.FK_MovieSeat_Seat">
-            <End Role="Seat" EntitySet="Seat" />
-            <End Role="MovieSeat" EntitySet="MovieSeat" />
           </AssociationSet>
           <AssociationSet Name="FK_Sale_Client" Association="Self.FK_Sale_Client">
             <End Role="Client" EntitySet="Client" />
-            <End Role="Sale" EntitySet="Sale" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Sale_Ticket" Association="Self.FK_Sale_Ticket">
-            <End Role="Ticket" EntitySet="Ticket" />
             <End Role="Sale" EntitySet="Sale" />
           </AssociationSet>
           <AssociationSet Name="FK_Session_Movie" Association="Self.FK_Session_Movie">
             <End Role="Movie" EntitySet="Movie" />
             <End Role="Session" EntitySet="Session" />
           </AssociationSet>
-          <AssociationSet Name="FK_Ticket_Cinema" Association="Self.FK_Ticket_Cinema">
-            <End Role="Cinema" EntitySet="Cinema" />
-            <End Role="Ticket" EntitySet="Ticket" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Ticket_Movie" Association="Self.FK_Ticket_Movie">
-            <End Role="Movie" EntitySet="Movie" />
-            <End Role="Ticket" EntitySet="Ticket" />
-          </AssociationSet>
           <AssociationSet Name="FK_Ticket_Session" Association="Self.FK_Ticket_Session">
             <End Role="Session" EntitySet="Session" />
             <End Role="Ticket" EntitySet="Ticket" />
           </AssociationSet>
+          <AssociationSet Name="FK_TicketSeat_Seat" Association="Self.FK_TicketSeat_Seat">
+            <End Role="Seat" EntitySet="Seat" />
+            <End Role="TicketSeat" EntitySet="TicketSeat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TicketSeat_Ticket" Association="Self.FK_TicketSeat_Ticket">
+            <End Role="Ticket" EntitySet="Ticket" />
+            <End Role="TicketSeat" EntitySet="TicketSeat" />
+          </AssociationSet>
           <AssociationSet Name="FK_Timetable_Cinema" Association="Self.FK_Timetable_Cinema">
             <End Role="Cinema" EntitySet="Cinema" />
             <End Role="Timetable" EntitySet="Timetable" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_Client" Association="Self.FK_User_Client">
-            <End Role="Client" EntitySet="Client" />
-            <End Role="User" EntitySet="User" />
           </AssociationSet>
           <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
             <End Role="Role" EntitySet="Role" />
@@ -408,9 +372,18 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EmployeeId" Type="Int32" />
+          <Property Name="Place" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Employee" Relationship="Self.FK_Cinema_Employee" FromRole="Cinema" ToRole="Employee" />
-          <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_Cinema" FromRole="Cinema" ToRole="Ticket" />
           <NavigationProperty Name="Timetable" Relationship="Self.FK_Timetable_Cinema" FromRole="Cinema" ToRole="Timetable" />
+        </EntityType>
+        <EntityType Name="CinemaMovie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CinemaId" Type="Int32" />
+          <Property Name="MovieId" Type="Int32" />
         </EntityType>
         <EntityType Name="Client">
           <Key>
@@ -425,7 +398,6 @@
           <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Photo" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Sale" Relationship="Self.FK_Sale_Client" FromRole="Client" ToRole="Sale" />
-          <NavigationProperty Name="User" Relationship="Self.FK_User_Client" FromRole="Client" ToRole="User" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
@@ -445,26 +417,31 @@
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Movie" Relationship="Self.FK_Movie_Genre" FromRole="Genre" ToRole="Movie" />
         </EntityType>
-        <EntityType Name="Movie">
+        <EntityType Name="Hole">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Operator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Movie" Relationship="Self.FK_Movie_Hole" FromRole="Hole" ToRole="Movie" />
+        </EntityType>
+        <EntityType Name="Movie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Director" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Screenwriter" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ReleaseDate" Type="DateTime" Precision="0" />
-          <Property Name="Cost" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="MovieTime" Type="Int32" />
           <Property Name="GenreId" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="QuanTicket" Type="Int32" />
+          <Property Name="HoleId" Type="Int32" />
           <NavigationProperty Name="Genre" Relationship="Self.FK_Movie_Genre" FromRole="Movie" ToRole="Genre" />
+          <NavigationProperty Name="Hole" Relationship="Self.FK_Movie_Hole" FromRole="Movie" ToRole="Hole" />
           <NavigationProperty Name="Session" Relationship="Self.FK_Session_Movie" FromRole="Movie" ToRole="Session" />
-          <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_Movie" FromRole="Movie" ToRole="Ticket" />
-          <NavigationProperty Name="MovieSeat" Relationship="Cinema1Model.FK_MovieSeat_Movie" FromRole="Movie" ToRole="MovieSeat" />
         </EntityType>
         <EntityType Name="Post">
           <Key>
@@ -494,23 +471,24 @@
           <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="Place" Type="Int32" />
           <NavigationProperty Name="Client" Relationship="Self.FK_Sale_Client" FromRole="Sale" ToRole="Client" />
-          <NavigationProperty Name="Ticket" Relationship="Self.FK_Sale_Ticket" FromRole="Sale" ToRole="Ticket" />
         </EntityType>
-        <EntityType Name="Screening">
+        <EntityType Name="Seat">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="MovieId" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Color" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="TicketSeat" Relationship="Self.FK_TicketSeat_Seat" FromRole="Seat" ToRole="TicketSeat" />
         </EntityType>
         <EntityType Name="Session">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MovieId" Type="Int32" />
           <Property Name="TimeOfSession" Type="DateTime" Precision="3" />
-          <Property Name="DateOfSession" Type="DateTime" Precision="3" />
+          <Property Name="Cost" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="Movie" Relationship="Self.FK_Session_Movie" FromRole="Session" ToRole="Movie" />
           <NavigationProperty Name="Ticket" Relationship="Self.FK_Ticket_Session" FromRole="Session" ToRole="Ticket" />
         </EntityType>
@@ -528,14 +506,22 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="MovieId" Type="Int32" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SessionId" Type="Int32" />
-          <Property Name="CinemaId" Type="Int32" />
-          <NavigationProperty Name="Cinema" Relationship="Self.FK_Ticket_Cinema" FromRole="Ticket" ToRole="Cinema" />
-          <NavigationProperty Name="Movie" Relationship="Self.FK_Ticket_Movie" FromRole="Ticket" ToRole="Movie" />
-          <NavigationProperty Name="Sale" Relationship="Self.FK_Sale_Ticket" FromRole="Ticket" ToRole="Sale" />
+          <Property Name="TotalCost" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="QuantityTicket" Type="Int32" />
           <NavigationProperty Name="Session" Relationship="Self.FK_Ticket_Session" FromRole="Ticket" ToRole="Session" />
+          <NavigationProperty Name="TicketSeat" Relationship="Self.FK_TicketSeat_Ticket" FromRole="Ticket" ToRole="TicketSeat" />
+        </EntityType>
+        <EntityType Name="TicketSeat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TicketId" Type="Int32" />
+          <Property Name="SeatId" Type="Int32" />
+          <NavigationProperty Name="Seat" Relationship="Self.FK_TicketSeat_Seat" FromRole="TicketSeat" ToRole="Seat" />
+          <NavigationProperty Name="Ticket" Relationship="Self.FK_TicketSeat_Ticket" FromRole="TicketSeat" ToRole="Ticket" />
         </EntityType>
         <EntityType Name="Timetable">
           <Key>
@@ -555,9 +541,11 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ClientId" Type="Int32" />
           <Property Name="RoleId" Type="Int32" />
-          <NavigationProperty Name="Client" Relationship="Self.FK_User_Client" FromRole="User" ToRole="Client" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
         </EntityType>
         <Association Name="FK_Cinema_Employee">
@@ -569,18 +557,6 @@
             </Principal>
             <Dependent Role="Cinema">
               <PropertyRef Name="EmployeeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Ticket_Cinema">
-          <End Role="Cinema" Type="Self.Cinema" Multiplicity="0..1" />
-          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Cinema">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Ticket">
-              <PropertyRef Name="CinemaId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -604,18 +580,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Sale">
-              <PropertyRef Name="ClientId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_Client">
-          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
-          <End Role="User" Type="Self.User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Client">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="User">
               <PropertyRef Name="ClientId" />
             </Dependent>
           </ReferentialConstraint>
@@ -644,6 +608,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Movie_Hole">
+          <End Role="Hole" Type="Self.Hole" Multiplicity="0..1" />
+          <End Role="Movie" Type="Self.Movie" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hole">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Movie">
+              <PropertyRef Name="HoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Session_Movie">
           <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
           <End Role="Session" Type="Self.Session" Multiplicity="*" />
@@ -652,18 +628,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Session">
-              <PropertyRef Name="MovieId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Ticket_Movie">
-          <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
-          <End Role="Ticket" Type="Self.Ticket" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Movie">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Ticket">
               <PropertyRef Name="MovieId" />
             </Dependent>
           </ReferentialConstraint>
@@ -680,15 +644,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Sale_Ticket">
-          <End Role="Ticket" Type="Self.Ticket" Multiplicity="0..1" />
-          <End Role="Sale" Type="Self.Sale" Multiplicity="*" />
+        <Association Name="FK_TicketSeat_Seat">
+          <End Role="Seat" Type="Self.Seat" Multiplicity="0..1" />
+          <End Role="TicketSeat" Type="Self.TicketSeat" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Ticket">
+            <Principal Role="Seat">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Sale">
-              <PropertyRef Name="TicketId" />
+            <Dependent Role="TicketSeat">
+              <PropertyRef Name="SeatId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -704,28 +668,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Cinema1Entities1" annotation:LazyLoadingEnabled="true">
+        <Association Name="FK_TicketSeat_Ticket">
+          <End Role="Ticket" Type="Self.Ticket" Multiplicity="0..1" />
+          <End Role="TicketSeat" Type="Self.TicketSeat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ticket">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TicketSeat">
+              <PropertyRef Name="TicketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Cinema1Entities5" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Cinema" EntityType="Self.Cinema" />
+          <EntitySet Name="CinemaMovie" EntityType="Self.CinemaMovie" />
           <EntitySet Name="Client" EntityType="Self.Client" />
           <EntitySet Name="Employee" EntityType="Self.Employee" />
           <EntitySet Name="Genre" EntityType="Self.Genre" />
+          <EntitySet Name="Hole" EntityType="Self.Hole" />
           <EntitySet Name="Movie" EntityType="Self.Movie" />
           <EntitySet Name="Post" EntityType="Self.Post" />
           <EntitySet Name="Role" EntityType="Self.Role" />
           <EntitySet Name="Sale" EntityType="Self.Sale" />
-          <EntitySet Name="Screening" EntityType="Self.Screening" />
+          <EntitySet Name="Seat" EntityType="Self.Seat" />
           <EntitySet Name="Session" EntityType="Self.Session" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="Ticket" EntityType="Self.Ticket" />
+          <EntitySet Name="TicketSeat" EntityType="Self.TicketSeat" />
           <EntitySet Name="Timetable" EntityType="Self.Timetable" />
           <EntitySet Name="User" EntityType="Self.User" />
           <AssociationSet Name="FK_Cinema_Employee" Association="Self.FK_Cinema_Employee">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Cinema" EntitySet="Cinema" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Ticket_Cinema" Association="Self.FK_Ticket_Cinema">
-            <End Role="Cinema" EntitySet="Cinema" />
-            <End Role="Ticket" EntitySet="Ticket" />
           </AssociationSet>
           <AssociationSet Name="FK_Timetable_Cinema" Association="Self.FK_Timetable_Cinema">
             <End Role="Cinema" EntitySet="Cinema" />
@@ -735,10 +710,6 @@
             <End Role="Client" EntitySet="Client" />
             <End Role="Sale" EntitySet="Sale" />
           </AssociationSet>
-          <AssociationSet Name="FK_User_Client" Association="Self.FK_User_Client">
-            <End Role="Client" EntitySet="Client" />
-            <End Role="User" EntitySet="User" />
-          </AssociationSet>
           <AssociationSet Name="FK_Employee_Post" Association="Self.FK_Employee_Post">
             <End Role="Post" EntitySet="Post" />
             <End Role="Employee" EntitySet="Employee" />
@@ -747,92 +718,54 @@
             <End Role="Genre" EntitySet="Genre" />
             <End Role="Movie" EntitySet="Movie" />
           </AssociationSet>
+          <AssociationSet Name="FK_Movie_Hole" Association="Self.FK_Movie_Hole">
+            <End Role="Hole" EntitySet="Hole" />
+            <End Role="Movie" EntitySet="Movie" />
+          </AssociationSet>
           <AssociationSet Name="FK_Session_Movie" Association="Self.FK_Session_Movie">
             <End Role="Movie" EntitySet="Movie" />
             <End Role="Session" EntitySet="Session" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Ticket_Movie" Association="Self.FK_Ticket_Movie">
-            <End Role="Movie" EntitySet="Movie" />
-            <End Role="Ticket" EntitySet="Ticket" />
           </AssociationSet>
           <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="User" EntitySet="User" />
           </AssociationSet>
-          <AssociationSet Name="FK_Sale_Ticket" Association="Self.FK_Sale_Ticket">
-            <End Role="Ticket" EntitySet="Ticket" />
-            <End Role="Sale" EntitySet="Sale" />
+          <AssociationSet Name="FK_TicketSeat_Seat" Association="Self.FK_TicketSeat_Seat">
+            <End Role="Seat" EntitySet="Seat" />
+            <End Role="TicketSeat" EntitySet="TicketSeat" />
           </AssociationSet>
           <AssociationSet Name="FK_Ticket_Session" Association="Self.FK_Ticket_Session">
             <End Role="Session" EntitySet="Session" />
             <End Role="Ticket" EntitySet="Ticket" />
           </AssociationSet>
-          <EntitySet Name="MovieSeat" EntityType="Cinema1Model.MovieSeat" />
-          <EntitySet Name="Seat" EntityType="Cinema1Model.Seat" />
-          <AssociationSet Name="FK_MovieSeat_Movie" Association="Cinema1Model.FK_MovieSeat_Movie">
-            <End Role="Movie" EntitySet="Movie" />
-            <End Role="MovieSeat" EntitySet="MovieSeat" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MovieSeat_Seat" Association="Cinema1Model.FK_MovieSeat_Seat">
-            <End Role="Seat" EntitySet="Seat" />
-            <End Role="MovieSeat" EntitySet="MovieSeat" />
+          <AssociationSet Name="FK_TicketSeat_Ticket" Association="Self.FK_TicketSeat_Ticket">
+            <End Role="Ticket" EntitySet="Ticket" />
+            <End Role="TicketSeat" EntitySet="TicketSeat" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="MovieSeat">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="MovieId" Type="Int32" />
-          <Property Name="SeatId" Type="Int32" />
-          <NavigationProperty Name="Movie" Relationship="Cinema1Model.FK_MovieSeat_Movie" FromRole="MovieSeat" ToRole="Movie" />
-          <NavigationProperty Name="Seat" Relationship="Cinema1Model.FK_MovieSeat_Seat" FromRole="MovieSeat" ToRole="Seat" />
-        </EntityType>
-        <EntityType Name="Seat">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Color" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
-          <NavigationProperty Name="MovieSeat" Relationship="Cinema1Model.FK_MovieSeat_Seat" FromRole="Seat" ToRole="MovieSeat" />
-        </EntityType>
-        <Association Name="FK_MovieSeat_Movie">
-          <End Type="Cinema1Model.Movie" Role="Movie" Multiplicity="0..1" />
-          <End Type="Cinema1Model.MovieSeat" Role="MovieSeat" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Movie">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MovieSeat">
-              <PropertyRef Name="MovieId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MovieSeat_Seat">
-          <End Type="Cinema1Model.Seat" Role="Seat" Multiplicity="0..1" />
-          <End Type="Cinema1Model.MovieSeat" Role="MovieSeat" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Seat">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MovieSeat">
-              <PropertyRef Name="SeatId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище Cinema1ModelContainer" CdmEntityContainer="Cinema1Entities1">
+        <EntityContainerMapping StorageEntityContainer="Хранилище Cinema1ModelContainer" CdmEntityContainer="Cinema1Entities5">
           <EntitySetMapping Name="Cinema">
             <EntityTypeMapping TypeName="Cinema1Model.Cinema">
               <MappingFragment StoreEntitySet="Cinema">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Place" ColumnName="Place" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CinemaMovie">
+            <EntityTypeMapping TypeName="Cinema1Model.CinemaMovie">
+              <MappingFragment StoreEntitySet="CinemaMovie">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CinemaId" ColumnName="CinemaId" />
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -867,21 +800,27 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Hole">
+            <EntityTypeMapping TypeName="Cinema1Model.Hole">
+              <MappingFragment StoreEntitySet="Hole">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Movie">
             <EntityTypeMapping TypeName="Cinema1Model.Movie">
               <MappingFragment StoreEntitySet="Movie">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Operator" ColumnName="Operator" />
                 <ScalarProperty Name="Director" ColumnName="Director" />
-                <ScalarProperty Name="Screenwriter" ColumnName="Screenwriter" />
                 <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
-                <ScalarProperty Name="Cost" ColumnName="Cost" />
                 <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="MovieTime" ColumnName="MovieTime" />
                 <ScalarProperty Name="GenreId" ColumnName="GenreId" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="QuanTicket" ColumnName="QuanTicket" />
+                <ScalarProperty Name="HoleId" ColumnName="HoleId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -914,11 +853,12 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Screening">
-            <EntityTypeMapping TypeName="Cinema1Model.Screening">
-              <MappingFragment StoreEntitySet="Screening">
+          <EntitySetMapping Name="Seat">
+            <EntityTypeMapping TypeName="Cinema1Model.Seat">
+              <MappingFragment StoreEntitySet="Seat">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -928,7 +868,7 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="MovieId" ColumnName="MovieId" />
                 <ScalarProperty Name="TimeOfSession" ColumnName="TimeOfSession" />
-                <ScalarProperty Name="DateOfSession" ColumnName="DateOfSession" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -947,9 +887,18 @@
             <EntityTypeMapping TypeName="Cinema1Model.Ticket">
               <MappingFragment StoreEntitySet="Ticket">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
                 <ScalarProperty Name="SessionId" ColumnName="SessionId" />
-                <ScalarProperty Name="CinemaId" ColumnName="CinemaId" />
+                <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
+                <ScalarProperty Name="QuantityTicket" ColumnName="QuantityTicket" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TicketSeat">
+            <EntityTypeMapping TypeName="Cinema1Model.TicketSeat">
+              <MappingFragment StoreEntitySet="TicketSeat">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TicketId" ColumnName="TicketId" />
+                <ScalarProperty Name="SeatId" ColumnName="SeatId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -970,26 +919,11 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MovieSeat">
-            <EntityTypeMapping TypeName="Cinema1Model.MovieSeat">
-              <MappingFragment StoreEntitySet="MovieSeat">
-                <ScalarProperty Name="SeatId" ColumnName="SeatId" />
-                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Seat">
-            <EntityTypeMapping TypeName="Cinema1Model.Seat">
-              <MappingFragment StoreEntitySet="Seat">
-                <ScalarProperty Name="Color" ColumnName="Color" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

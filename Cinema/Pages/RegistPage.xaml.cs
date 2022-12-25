@@ -30,12 +30,21 @@ namespace Cinema.Pages
         {
             string login = LoginTb.Text.Trim();
             string password = PasswordTb.Password.Trim();
+            string firstname = FirstNameTb.Text.Trim();
+            string lastname = LastNameTb.Text.Trim();
+            string patronymic = PatronymicTb.Text.Trim();
+            string email = EmailTb.Text.Trim();
             if(login.Length > 0 && password.Length > 0)
             {
                 DBConnect.db.User.Add(new User
                 {
                     Login = login,
-                    Password = password
+                    Password = password,
+                    FirstName = firstname,
+                    LastName = lastname,
+                    Patronymic = patronymic,
+                    Email = email,
+                    RoleId = 2
                 }) ;
                 DBConnect.db.SaveChanges();
                 MessageBox.Show("Вы зарегистрированы!");
@@ -45,6 +54,16 @@ namespace Cinema.Pages
             {
                 MessageBox.Show("Пусто! Заполните поля.");
             }
+        }
+
+        private void CleanBtn_Click(object sender, RoutedEventArgs e)
+        {
+            LoginTb.Text = "";
+            PasswordTb.Password = "";
+            FirstNameTb.Text = "";
+            LastNameTb.Text = "";
+            PatronymicTb.Text = "";
+            EmailTb.Text = "";
         }
     }
 }

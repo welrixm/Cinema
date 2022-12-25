@@ -18,7 +18,6 @@ namespace Cinema.Components
         public Client()
         {
             this.Sale = new HashSet<Sale>();
-            this.User = new HashSet<User>();
         }
     
         public int Id { get; set; }
@@ -32,7 +31,5 @@ namespace Cinema.Components
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sale> Sale { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> User { get; set; }
     }
 }

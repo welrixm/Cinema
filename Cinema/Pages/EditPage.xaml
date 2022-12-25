@@ -13,42 +13,49 @@
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Style="{StaticResource TxtBlock}">Наименование</TextBlock>
+                    <TextBlock Style="{StaticResource TxtBlock2}">Наименование</TextBlock>
                     <TextBox x:Name="NameTbx" Style="{StaticResource TxtBox}" Text="{Binding Name}"></TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Style="{StaticResource TxtBlock}">Режиссер</TextBlock>
+                    <TextBlock Style="{StaticResource TxtBlock2}">Режиссер</TextBlock>
                     <TextBox x:Name="DirectorTbx" Style="{StaticResource TxtBox}" Text="{Binding Director}"></TextBox>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Style="{StaticResource TxtBlock}">Сценарист</TextBlock>
+                <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Style="{StaticResource TxtBlock2}">Сценарист</TextBlock>
                     <TextBox x:Name="WritertTbx" Style="{StaticResource TxtBox}" Text="{Binding Screenwriter}"></TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Style="{StaticResource TxtBlock}">Оператор</TextBlock>
+                    <TextBlock Style="{StaticResource TxtBlock2}">Оператор</TextBlock>
                     <TextBox x:Name="OperatorTbx" Style="{StaticResource TxtBox}" Text="{Binding Operator}"></TextBox>
-                </StackPanel>
+                </StackPanel>-->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Style="{StaticResource TxtBlock}">Дата релиза</TextBlock>
+                    <TextBlock Style="{StaticResource TxtBlock2}">Дата релиза</TextBlock>
                     <TextBox x:Name="ReleaseTbx" Style="{StaticResource TxtBox}" Text="{Binding ReleaseDate}"></TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Style="{StaticResource TxtBlock}">Количество билетов</TextBlock>
+                    <TextBlock Style="{StaticResource TxtBlock2}">Количество билетов</TextBlock>
                     <TextBox x:Name="QuanTbx" Style="{StaticResource TxtBox}" Text="{Binding QuanTicket}"></TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Style="{StaticResource TxtBlock}">Жанр</TextBlock>
+                    <TextBlock Style="{StaticResource TxtBlock2}">Жанр</TextBlock>
                     <ComboBox x:Name="GenreCbx" Style="{StaticResource ComboBox}" SelectedItem="{Binding Genre}"></ComboBox>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Style="{StaticResource TxtBlock}">Стоимость</TextBlock>
+                <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Style="{StaticResource TxtBlock2}">Стоимость</TextBlock>
                     <TextBox x:Name="CostTbx" Style="{StaticResource TxtBox}" Text="{Binding Cost}"></TextBox>
-                </StackPanel>
+                </StackPanel>-->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Style="{StaticResource TxtBlock}">Длительнность времени</TextBlock>
+                    <TextBlock Style="{StaticResource TxtBlock2}">Длительнность времени</TextBlock>
                     <TextBox x:Name="TimeTbx" Style="{StaticResource TxtBox}" Text="{Binding MovieTime}"></TextBox>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    
+                        
+                            <TextBlock  Style="{StaticResource TxtBlock2}">Зал</TextBlock>
+                    <ComboBox x:Name="HoleCbx" Style="{StaticResource ComboBox}" SelectedItem="{Binding Hole}"></ComboBox>
 
+
+                </StackPanel>
 
                 <Button x:Name="SaveBtn" Content="Сохранить" Click="SaveBtn_Click"  Style="{StaticResource Button}"></Button>
             </StackPanel>

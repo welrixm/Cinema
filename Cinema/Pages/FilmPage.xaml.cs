@@ -16,6 +16,7 @@ using Cinema.Components;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 
+
 namespace Cinema.Pages
 {
     /// <summary>
@@ -23,12 +24,21 @@ namespace Cinema.Pages
     /// </summary>
     public partial class FilmPage : Page
     {
+        int actualPage = 0;
         public FilmPage()
         {
             InitializeComponent();
-            FilmList.ItemsSource = DBConnect.db.Movie.ToList();
+            if (Navigation.AuthUser.RoleId == 2)
+                AddNewMovieBtn.Visibility = Visibility.Collapsed;
+            //FilmList.ItemsSource = DBConnect.db.Movie.ToList();
+            else if (Navigation.AuthUser.RoleId == 3)
+            {
+                AddNewMovieBtn.Visibility = Visibility.Collapsed;
+            }
             DBConnect.db.Movie.Load();
             Movies = DBConnect.db.Movie.Local;
+            FilmList.ItemsSource = DBConnect.db.Movie.Where(x => x.IsActive != false).ToList();
+            GeneralCount.Text = DBConnect.db.Movie.Where(x => x.IsActive != false).Count().ToString();
         }
         public ObservableCollection<Movie> Movies
         {
@@ -49,40 +59,39 @@ namespace Cinema.Pages
                     switch ((CbSort.SelectedItem as ComboBoxItem).Tag)
                     {
                         case "1":
-                            //products = DBConnect.db.Product.Local;
+                          
                             filmL = DBConnect.db.Movie;
                             break;
                         case "2":
-                            //products = new ObservableCollection<Product>(Products.OrderBy(x => x.Name));
+                           
                             filmL = filmL.OrderBy(x => x.Name);
                             break;
                         case "3":
-                            //products = new ObservableCollection<Product>(Products.OrderByDescending(x => x.Name));
+                          
                             filmL = filmL.OrderByDescending(x => x.Name);
 
                             break;
                         case "4":
-                            //products = new ObservableCollection<Product>(Products.OrderBy(x => x.DateOfAddition));
+                           
                             filmL = filmL.OrderBy(x => x.ReleaseDate);
                             break;
                         case "5":
-                            //products = new ObservableCollection<Product>(Products.OrderByDescending(x => x.DateOfAddition));
+                            
                             filmL = filmL.OrderByDescending(x => x.ReleaseDate);
                             break;
 
                     }
 
                 }
-                // ListProduct.ItemsSource = products.ToList();
-
+                
                 if (SearchTb == null)
                     return;
                 if (SearchTb.Text.Length > 0)
                 {
-                    //products = new ObservableCollection<Product>(Products.Where(x => x.Name.ToLower().StartsWith(TxtSearch.Text.ToLower()) || x.Description.ToLower().StartsWith(TxtSearch.Text.ToLower())));
+                   
                     filmL = filmL.Where(x => x.Name.StartsWith(SearchTb.Text));
                 }
-                //ListProduct.ItemsSource = products.ToList();
+                
 
                 if (CbFiltration == null)
                     return;
@@ -91,49 +100,49 @@ namespace Cinema.Pages
                     switch ((CbFiltration.SelectedItem as ComboBoxItem).Tag)
                     {
                         case "1":
-                            //products = DBConnect.db.Product.Local;
+                           
                             filmL = DBConnect.db.Movie;
                             break;
                         case "2":
-                            //products = new ObservableCollection<Product>(Products.Where(x => x.UnitId == 2));
+                            
                             filmL = filmL.Where(x => x.GenreId == 1);
                             break;
                         case "3":
-                            //products = new ObservableCollection<Product>(Products.Where(x => x.UnitId == 1));
+                           
                             filmL = filmL.Where(x => x.GenreId == 2);
                             break;
                         case "4":
-                            //products = new ObservableCollection<Product>(Products.Where(x => x.UnitId == 1));
+                           
                             filmL = filmL.Where(x => x.GenreId == 3);
                             break;
                         case "5":
-                            //products = new ObservableCollection<Product>(Products.Where(x => x.UnitId == 1));
+                        
                             filmL = filmL.Where(x => x.GenreId == 4);
                             break;
                         case "6":
-                            //products = new ObservableCollection<Product>(Products.Where(x => x.UnitId == 1));
+                            
                             filmL = filmL.Where(x => x.GenreId == 5);
                             break;
                         default:
-                            //products = new ObservableCollection<Product>(Products.Where(x => x.UnitId == 1));
+                           
                             filmL = filmL.Where(x => x.GenreId == 6);
                             break;
                             
                     }
                 }
                 // ListProduct.ItemsSource = products.ToList();
-                //if (CbCount.SelectedIndex > 0 && products.Count() > 0)
-                //{
-                //    int selCount = Convert.ToInt32((CbCount.SelectedItem as ComboBoxItem).Content);
-                //    products = new ObservableCollection<Product>(Products.Skip(selCount * actualPage).Take(selCount));
-                //    if (products.Count() == 0)
-                //    {
-                //        actualPage--;
+                if (CbCount.SelectedIndex > 0 && filmL.Count() > 0)
+                {
+                    int selCount = Convert.ToInt32((CbCount.SelectedItem as ComboBoxItem).Content);
+                    filmL = new ObservableCollection<Movie>(Movies.Skip(selCount * actualPage).Take(selCount));
+                    if (movies.Count() == 0)
+                    {
+                        actualPage--;
 
-                //    }
-                //}
+                    }
+                }
 
-                //FoundCount.Text = products.Count().ToString() + " из ";
+                FoundCount.Text = filmL.Count().ToString() + " из ";
             }
             //ListProduct.ItemsSource = products.ToList();
             FilmList.ItemsSource = filmL.ToList();
@@ -141,7 +150,7 @@ namespace Cinema.Pages
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Navigation.NextPage(new Nav("Кинотеатр", new FilmPage()));
+            Navigation.NextPage(new Nav("Фильмы", new FilmPage()));
         }
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
@@ -152,12 +161,12 @@ namespace Cinema.Pages
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
-            var selMovie = (sender as Button).DataContext as Movie;
+            var selMovie = FilmList.SelectedItems.Cast<Movie>().ToList();
             if (MessageBox.Show("Вы точно хотите удалить эту запись?", "Уведомление", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                selMovie.IsActive = false;
-                MessageBox.Show("Запись удалена");
+                DBConnect.db.Movie.RemoveRange(selMovie);
                 DBConnect.db.SaveChanges();
+                MessageBox.Show("Данные удалены");
                 FilmList.ItemsSource = DBConnect.db.Movie.ToList();
             }
         }
@@ -171,32 +180,75 @@ namespace Cinema.Pages
 
         private void BuyTicketBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            Navigation.NextPage(new Nav("Покупка билета", new BuyTicket(new Ticket())));
         }
 
-        private void TicketBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        //private void TicketBtn_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Navigation.NextPage(new Nav("Список билетов", new TicketPage()));
+        //}
 
         private void SearchTb_SelectionChanged(object sender, RoutedEventArgs e)
         {
+            actualPage = 0;
             Refresh();
         }
 
         private void CbSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            actualPage = 0;
             Refresh();
         }
 
         private void CbCount_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-           // Refresh();
+            Refresh();
         }
 
         private void CbFiltration_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            actualPage = 0;
             Refresh();
+        }
+
+        private void SessionBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Navigation.NextPage(new Nav("Сеансы", new SessionPage()));
+        }
+
+        private void Page_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (Visibility == Visibility.Visible)
+            {
+                DBConnect.db.ChangeTracker.Entries().ToList().ForEach(x => x.Reload());
+                FilmList.ItemsSource = DBConnect.db.Movie.ToList();
+            }
+        }
+
+        private void TicketBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Navigation.NextPage(new Nav("Список билетов", new TicketPage()));
+        }
+
+        private void LeftBtn_Click(object sender, RoutedEventArgs e)
+        {
+            actualPage--;
+            if (actualPage < 0)
+                actualPage = 0;
+            Refresh();
+        }
+
+        private void RightBtn_Click(object sender, RoutedEventArgs e)
+        {
+            actualPage++;
+            Refresh();
+        }
+
+        private void ExitBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Navigation.isAuth = false;
+            Navigation.navs.Clear();
+            Navigation.NextPage(new Nav("Авторизация", new AuthPage()));
         }
     }
 }
